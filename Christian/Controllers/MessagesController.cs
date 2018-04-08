@@ -18,7 +18,7 @@ namespace Christian
         {
             if (activity.Type == ActivityTypes.Message)
             {
-                await Conversation.SendAsync(activity, () => new Dialogs.RootDialog());
+                await Conversation.SendAsync(activity, CreateLuisDialog);
             }
             else
             {
@@ -26,6 +26,11 @@ namespace Christian
             }
             var response = Request.CreateResponse(HttpStatusCode.OK);
             return response;
+        }
+
+        internal static IDialog<object> CreateLuisDialog()
+        {
+            return Chain.From(() => new Dialogs.BasicLuisDialog());
         }
 
         private Activity HandleSystemMessage(Activity message)
